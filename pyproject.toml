@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mini-infer"
+version = "0.1.0"
+description = "Minimal LLM inference engine implementing vLLM core ideas"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.3",
+    "transformers>=4.40",
+    "safetensors>=0.4",
+    "numpy>=1.24",
+]
+optional-dependencies = { flash-attn = ["flash-attn>=2.5"], dev = ["pytest>=8.0", "ruff>=0.4", "triton>=2.3"] }
+
+[project.scripts]
+mini-infer = "miniinfer.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["miniinfer*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C4", "ARG"]
+ignore = ["ARG001", "ARG002", "B008", "T201", "B905"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+markers = [
+    "gpu: marks tests as requiring GPU",
+    "model: marks tests as requiring model weights",
+    "slow: marks tests as slow",
+]
